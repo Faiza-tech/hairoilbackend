@@ -1,186 +1,446 @@
-# 🛒 Hair Oil Ecommerce Backend (Node.js + Express)
+# 🛍️ Hair Oil Ecommerce Backend
 
-A secure, scalable REST API powering the Hair Oil Ecommerce application.
-This backend handles authentication, product management, orders, payments, image uploads, email notifications, and admin features.
+A RESTful backend API for a full-stack hair oil ecommerce application built with **Node.js**, **Express**, and **MongoDB**.
 
----
-
-## 🚀 Live API
-
-👉 (SOON deployed backend API link here)
+The backend provides authentication, user management, product management, orders, Stripe payments, Stripe webhooks, email notifications, Cloudinary image uploads, admin functionality, analytics, and customer messages.
 
 ---
 
-## ✨ Features
+# 🚀 Project Overview
 
-### 🔐 Authentication
+This repository contains the backend/API for the Hair Oil Ecommerce application.
 
-* User Registration
-* User Login
-* JWT Authentication
-* Protected Routes
-* Admin Authorization
-* User Profile API
+It is designed to work with a separate React + Vite frontend.
 
----
+### Backend Responsibilities
 
-### 📦 Product Management
-
+* User authentication
+* JWT authorization
+* User registration
+* User login
+* Forgot Password
+* Password reset
 * Product CRUD
-* Admin Product Management
-* Product Search
-* Category Management
-* Inventory Tracking
-* Cloudinary Image Upload
+* Product image uploads
+* Shopping orders
+* Order management
+* Stripe Checkout
+* Stripe webhook processing
+* Payment verification
+* Order confirmation emails
+* Admin dashboard APIs
+* Analytics APIs
+* User management
+* Contact/message APIs
 
 ---
 
-### 🛍️ Orders
+# ✨ Features
 
-* Create Orders
-* My Orders
-* Order Details
-* Admin Order Management
-* Update Order Status
-* Cancel Orders
-* Paid / Unpaid Tracking
-* Delivered / Pending Tracking
+## 👤 Authentication
 
----
-
-### 💳 Payments
-
-* Stripe Checkout Integration
-* Stripe Webhook Verification
-* Automatic Payment Status Updates
-* Secure Payment Processing
+* User registration
+* User login
+* JWT authentication
+* Protected routes
+* Admin authorization
+* Token expiration
+* Forgot Password
+* Password Reset
+* Secure password hashing with bcrypt
+* Email-based password reset
 
 ---
 
-### 📧 Email
+# 🔐 Password Reset Flow
 
-* Order Confirmation Email
-* Nodemailer Integration
-
----
-
-### 👨‍💼 Admin Dashboard
-
-* Manage Products
-* Manage Orders
-* Manage Users
-* Analytics Ready
-* Inventory Tracking
-
----
-
-### 🔒 Security
-
-* JWT Authentication
-* Password Hashing (bcrypt)
-* Protected Admin Routes
-* Secure Environment Variables
-* Stripe Webhook Signature Verification
-
----
-
-## 🛠️ Tech Stack
-
-* Node.js
-* Express.js
-* MongoDB
-* Mongoose
-* JWT Authentication
-* bcryptjs
-* Stripe
-* Cloudinary
-* Multer
-* Nodemailer
-* dotenv
-* CORS
-
----
-
-## 📦 Dependencies Used
-
-```bash
-express
-mongoose
-cors
-dotenv
-
-jsonwebtoken
-bcryptjs
-
-stripe
-
-cloudinary
-multer
-multer-storage-cloudinary
-
-nodemailer
-
-cookie-parser
-
-express-async-handler
+```
+User clicks Forgot Password
+          ↓
+Enters registered email
+          ↓
+Backend finds user
+          ↓
+Generate secure reset token
+          ↓
+Hash token before database storage
+          ↓
+Set token expiration
+          ↓
+Send reset email
+          ↓
+User opens reset link
+          ↓
+Creates new password
+          ↓
+Password is hashed
+          ↓
+Reset token removed
+          ↓
+User can login
 ```
 
 ---
 
-## 📁 Folder Structure
+# 🛍️ Product Management
 
-```text
-Backend/
+The API supports:
+
+* Create products
+* Read products
+* Update products
+* Delete products
+* Search products
+* Product filtering
+* Product pagination
+* Product image uploads
+* Cloudinary integration
+
+---
+
+# 📦 Order Management
+
+The backend supports:
+
+* Create orders
+* Get user orders
+* Get all orders
+* Get individual order details
+* Update order status
+* Cancel pending orders
+* Paid order tracking
+* Payment information
+* Shipping address information
+
+---
+
+# 💳 Stripe Payment Integration
+
+The backend integrates with Stripe for secure online payments.
+
+Payment flow:
+
+```
+Customer Checkout
+       ↓
+Create Order
+       ↓
+Create Stripe Checkout Session
+       ↓
+Customer Pays
+       ↓
+Stripe Processes Payment
+       ↓
+Stripe Webhook
+       ↓
+Backend Verifies Event
+       ↓
+Order Marked Paid
+       ↓
+Confirmation Email
+```
+
+---
+
+# 🔔 Stripe Webhooks
+
+Stripe webhook events are handled by the backend.
+
+Important event:
+
+```
+checkout.session.completed
+```
+
+The webhook:
+
+1. Verifies the Stripe signature.
+2. Finds the matching order.
+3. Prevents duplicate processing.
+4. Marks the order as paid.
+5. Stores payment information.
+6. Saves the order.
+7. Sends the customer a confirmation email.
+
+---
+
+# 📧 Email System
+
+The backend uses **Nodemailer** with Gmail SMTP.
+
+Email functionality includes:
+
+* Password reset emails
+* Order confirmation emails
+* Customer notifications
+
+The email sender is configured using environment variables.
+
+---
+
+# ☁️ Cloudinary
+
+Cloudinary is used for product image uploads.
+
+The backend handles:
+
+* Image upload
+* Image storage
+* Cloudinary URLs
+* Product image references
+
+---
+
+# 👨‍💼 Admin Features
+
+Admin-protected APIs provide functionality for:
+
+### Dashboard
+
+* Revenue statistics
+* Total products
+* Total users
+* Total orders
+* Inventory information
+* Low-stock products
+* Top-selling products
+* Recent orders
+* Recent users
+
+### Products
+
+* Create
+* Update
+* Delete
+* Search
+* Manage images
+
+### Orders
+
+* View orders
+* Search orders
+* Update order status
+* Cancel pending orders
+* Export order information
+
+### Users
+
+* View users
+* Search users
+* Admin authorization
+
+### Messages
+
+* Receive customer messages
+* Manage customer messages
+
+---
+
+# 🛠️ Technology Stack
+
+## Backend
+
+* Node.js
+* Express.js
+* JavaScript
+* MongoDB
+* Mongoose
+
+## Authentication
+
+* JSON Web Token
+* bcryptjs
+* crypto
+
+## Payments
+
+* Stripe
+* Stripe Webhooks
+
+## Email
+
+* Nodemailer
+* Gmail SMTP
+
+## Image Storage
+
+* Cloudinary
+
+## Security
+
+* Helmet
+* CORS
+* Environment variables
+* JWT authentication
+* Password hashing
+* Stripe webhook signature verification
+
+---
+
+# 📦 Main Dependencies
+
+```bash
+npm install express
+npm install mongoose
+npm install bcryptjs
+npm install jsonwebtoken
+npm install dotenv
+npm install cors
+npm install helmet
+npm install nodemailer
+npm install stripe
+npm install cloudinary
+npm install multer
+```
+
+For development:
+
+```bash
+npm install --save-dev nodemon
+```
+
+---
+
+# 📁 Project Structure
+
+```
+backend/
 │
 ├── config/
-│   ├── db.js
-│   ├── cloudinary.js
-│   └── stripe.js
+│   └── db.js
 │
 ├── controllers/
 │   ├── authController.js
 │   ├── productController.js
 │   ├── orderController.js
-│   ├── uploadController.js
-│   └── userController.js
+│   ├── paymentController.js
+│   ├── adminController.js
+│   └── contactController.js
 │
 ├── middleware/
-│   ├── authMiddleware.js
-│   ├── adminMiddleware.js
-│   ├── uploadMiddleware.js
-│   └── errorMiddleware.js
+│   └── authMiddleware.js
 │
 ├── models/
-│   ├── User.js
-│   ├── Product.js
-│   └── Order.js
+│   ├── userModel.js
+│   ├── productModel.js
+│   └── orderModel.js
 │
 ├── routes/
 │   ├── authRoutes.js
-│   ├── productRoutes.js
+│   ├── productsRoutes.js
 │   ├── orderRoutes.js
-│   ├── uploadRoutes.js
-│   ├── userRoutes.js
-│   └── webhookRoutes.js
+│   ├── paymentRoutes.js
+│   ├── adminRoutes.js
+│   ├── contactRoutes.js
+│   └── testEmailRoutes.js
 │
 ├── utils/
-│   ├── generateToken.js
-│   └── sendEmail.js
+│   ├── sendEmail.js
+│   └── orderEmailTemplate.js
 │
 ├── public/
+│   └── images/
 │
-├── server.js
-│
+├── .env
+├── .gitignore
 ├── package.json
-│
-└── .env
+└── server.js
 ```
 
 ---
 
-## 🔑 Environment Variables
+# 🔌 API Structure
 
-Create a `.env` file inside the backend folder.
+The API is organized into resource-based routes.
+
+```
+/api/auth
+/api/products
+/api/orders
+/api/admin
+/api/payment
+/api/upload
+/api/contact
+/api/test-email
+```
+
+---
+
+# 👤 Authentication Routes
+
+```
+POST /api/auth/register
+POST /api/auth/login
+GET  /api/auth/profile
+POST /api/auth/forgot-password
+POST /api/auth/reset-password/:token
+```
+
+---
+
+# 🛍️ Product Routes
+
+Product routes provide functionality for:
+
+```
+GET
+POST
+PUT
+DELETE
+```
+
+depending on the requested resource and authorization level.
+
+---
+
+# 📦 Order Routes
+
+Order APIs provide:
+
+* Create order
+* User order history
+* Individual order details
+* Admin order management
+* Order status updates
+
+---
+
+# 💳 Payment Routes
+
+Stripe-related endpoints handle:
+
+* Checkout session creation
+* Payment processing
+* Stripe webhook events
+* Payment confirmation
+
+The Stripe webhook must receive the **raw request body** so that Stripe signature verification works correctly.
+
+---
+
+# 🌐 CORS
+
+The backend allows the frontend application to communicate with the API through CORS configuration.
+
+Development:
+
+```
+Frontend
+http://localhost:5173
+
+Backend
+http://localhost:5000
+```
+
+Production URLs should be configured through environment variables.
+
+---
+
+# 🔐 Environment Variables
+
+The backend requires environment variables for sensitive configuration.
+
+Example `.env.example`:
 
 ```env
 PORT=5000
@@ -208,242 +468,219 @@ CLIENT_URL=http://localhost:5173
 
 ---
 
-## 🚀 Getting Started
+# 🚀 Getting Started
 
-Install dependencies
+## 1. Clone repository
+
+```bash
+git clone git@github.com:Faiza-tech/hairoilbackend.git
+```
+
+## 2. Enter the project
+
+```bash
+cd hairoilbackend
+```
+
+## 3. Install dependencies
 
 ```bash
 npm install
 ```
 
-Start development server
+## 4. Create `.env`
+
+Create:
+
+```
+.env
+```
+
+and add your local environment variables.
+
+---
+
+# ▶️ Run Development Server
+
+If your `package.json` contains the development script:
 
 ```bash
 npm run dev
 ```
 
-or
+The backend runs on:
 
-```bash
-node server.js
 ```
-
-Backend runs on
-
-```text
 http://localhost:5000
 ```
 
 ---
 
-## 📡 API Routes
+# ▶️ Run Production Server
+
+```bash
+npm start
+```
+
+The exact command depends on the scripts configured in `package.json`.
+
+---
+
+# 🧪 Testing
+
+Before deployment, test:
 
 ### Authentication
 
-```http
-POST    /api/auth/register
-
-POST    /api/auth/login
-
-GET     /api/auth/profile
-```
-
----
+* Register
+* Login
+* Wrong password
+* Expired JWT
+* Forgot Password
+* Reset Password
 
 ### Products
 
-```http
-GET     /api/products
-
-GET     /api/products/:id
-
-POST    /api/products
-
-PUT     /api/products/:id
-
-DELETE  /api/products/:id
-```
-
----
+* Product listing
+* Search
+* Filtering
+* Admin create
+* Admin edit
+* Admin delete
 
 ### Orders
 
-```http
-POST    /api/orders
-
-GET     /api/orders/my
-
-GET     /api/orders/:id
-
-GET     /api/orders
-
-PUT     /api/orders/:id/status
-```
-
----
-
-### Upload
-
-```http
-POST /api/upload
-```
-
----
+* Create order
+* User orders
+* Admin orders
+* Order status updates
 
 ### Stripe
 
-```http
-POST /api/create-checkout-session
+* Checkout session
+* Successful payment
+* Stripe webhook
+* Paid order update
+* Confirmation email
 
-POST /api/webhook
+### Email
+
+* Password reset email
+* Order confirmation email
+
+---
+
+# 🔒 Security Considerations
+
+The backend uses several security measures:
+
+* Password hashing with bcrypt
+* JWT authentication
+* Protected routes
+* Admin authorization
+* Helmet security headers
+* CORS
+* Environment variables
+* Stripe webhook signature verification
+* Secure password reset tokens
+* Expiring password reset links
+
+---
+
+# 🔄 Full Application Architecture
+
+```
+                    CUSTOMER
+                       │
+                       ▼
+              React + Vite Frontend
+                       │
+                       │ Axios / REST API
+                       ▼
+              Node.js + Express API
+                       │
+          ┌────────────┼────────────┐
+          │            │            │
+          ▼            ▼            ▼
+       MongoDB      Stripe      Cloudinary
+          │            │            │
+          │            ▼            │
+          │       Stripe Webhook     │
+          │            │            │
+          └────────────┼────────────┘
+                       │
+                       ▼
+                  Nodemailer
+                       │
+                       ▼
+                  Customer Email
 ```
 
 ---
 
-### Users
+# 🧠 What I Learned
 
-```http
-GET /api/users
+Through this backend project I worked with:
 
-PUT /api/users/:id
-```
-
----
-
-## 💳 Payment Flow
-
-```text
-User Checkout
-      │
-      ▼
-Create Order
-      │
-      ▼
-Stripe Checkout
-      │
-      ▼
-Successful Payment
-      │
-      ▼
-Stripe Webhook
-      │
-      ▼
-Verify Signature
-      │
-      ▼
-Update Order Status
-      │
-      ▼
-Send Confirmation Email
-```
-
----
-
-## 📧 Email Flow
-
-```text
-Order Created
-      │
-      ▼
-Payment Success
-      │
-      ▼
-Webhook Triggered
-      │
-      ▼
-Order Updated
-      │
-      ▼
-Confirmation Email Sent
-```
-
----
-
-## 🔒 Authentication Flow
-
-```text
-Register
-      │
-      ▼
-Password Hashing
-      │
-      ▼
-JWT Generated
-      │
-      ▼
-Protected Routes
-      │
-      ▼
-Admin Authorization
-```
-
----
-
-## 📸 Screenshots
-
-(Add screenshots here)
-
-- MongoDB Collections
-- Stripe Dashboard
-- Cloudinary Upload
-- Postman API Testing
-- Order Confirmation Email
-
----
-
-## 🧠 What I Learned
-
-* Building scalable REST APIs
-* JWT Authentication & Authorization
-* Password Hashing using bcrypt
-* MongoDB Data Modeling
-* Stripe Payment Integration
-* Stripe Webhook Verification
-* Cloudinary Image Upload
-* Sending Emails using Nodemailer
-* Middleware & Error Handling
-* Secure Environment Variable Management
-* Building a complete Ecommerce Backend
-
----
-
-## 🚀 Deployment
-
-Can be deployed on:
-
-* Render
-* Railway
-* Cyclic
-* AWS
-* DigitalOcean
-* VPS
-
-Required Services
-
-* MongoDB Atlas
+* Node.js
+* Express
+* MongoDB
+* Mongoose
+* REST API design
+* JWT authentication
+* bcrypt password hashing
+* Password reset systems
+* Email workflows
+* Nodemailer
+* Stripe Checkout
+* Stripe webhooks
+* Payment verification
 * Cloudinary
-* Stripe
-* Gmail App Password (SMTP)
+* CRUD APIs
+* Admin authorization
+* Middleware
+* CORS
+* Helmet
+* Environment variable management
+* Error handling
+* Database relationships
+* Ecommerce order processing
 
 ---
 
-## 📌 Future Improvements
+# 📌 Future Improvements
 
-* Refresh Token Authentication
+Potential improvements include:
+
+* Refresh token authentication
+* Rate limiting
+* Advanced request validation
+* More detailed audit logging
+* Product reviews API
 * Wishlist API
-* Product Reviews
-* Coupons & Discounts
-* Invoice PDF Generation
-* Redis Caching
-* Docker Support
-* Unit Testing
-* CI/CD Pipeline
-* API Rate Limiting
+* Coupon and discount API
+* Inventory reservation
+* Advanced analytics
+* Automated testing
+* API documentation with Swagger
+* Production monitoring
+* More advanced email templates
 
 ---
 
-## 🙌 Author
+# 🔗 Related Repository
+
+Frontend repository:
+
+```
+https://github.com/Faiza-tech/hairoilFrontend
+```
+
+---
+
+# 👨‍💻 Author
 
 **Faiza**
 
-Full Stack Developer | MERN Stack | React | Node.js | Express | MongoDB | Stripe | Cloudinary
+
+If you find this project helpful, feel free to ⭐ the repository.
