@@ -31,6 +31,8 @@ const stripeWebhook = async (req, res) => {
 
   if (event.type === "checkout.session.completed") {
 
+    console.log("✅ Processing checkout.session.completed");
+
     const session = event.data.object;
 
     // Optional: retrieve full PaymentIntent from Stripe
@@ -39,13 +41,17 @@ const stripeWebhook = async (req, res) => {
     // Find the order
     const order = await Order.findOne({ stripeSessionId: session.id, });
 
+    console.log("Found order:", order?._id);
+
     // Order doesn't exist
     if (!order) {
+      console.log("❌ Order not found");
       return res.sendStatus(200);
     }
 
     // Already processed
     if (order.isPaid) {
+      console.log("Order already paid");
       return res.sendStatus(200);
     }
 
@@ -90,9 +96,13 @@ const stripeWebhook = async (req, res) => {
 
     // Tell Stripe the webhook was received successfully
     res.sendStatus(200);
-  };
+  } else {
+    // Ignore other webhook events
+    res.sendStatus(200);
+  }
+}
 
-  module.exports = {
-    stripeWebhook,
-  };
+module.exports = {
+  stripeWebhook,
+};
 
