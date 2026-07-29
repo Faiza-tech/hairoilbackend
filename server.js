@@ -63,7 +63,13 @@ app.use("/api/contact", contactRoutes);// contact form
 app.use("/images", express.static("public/images"));
 app.use(express.static("public"));
 
-app.get("/", (req, res) => { res.send("API Running..."); });
+app.get("/", (req, res) => {
+  res.send("API Running...");
+});
+
+app.get("/healthz", (req, res) => {
+  res.status(200).send("OK");
+});
 
 const PORT = process.env.PORT || 5000;
 
