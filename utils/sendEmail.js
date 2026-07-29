@@ -25,6 +25,8 @@ const sendEmail = async ({ to, subject, html, }) => {
 
     html,
   });
+
+  console.log("Message ID:", info.messageId);
 };
 
 module.exports = sendEmail;
