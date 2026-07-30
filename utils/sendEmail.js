@@ -1,10 +1,12 @@
+
+
+
 const nodemailer = require("nodemailer");
 
-const sendEmail = async ({ to, subject, html, }) => {
+const sendEmail = async ({ to, subject, html }) => {
 
-
- /* const transporter = nodemailer.createTransport({
-    host: "smtp.gmail.com",
+  const transporter = nodemailer.createTransport({
+    host: "smtp-relay.brevo.com",
     port: 587,
     secure: false,
     auth: {
@@ -13,45 +15,13 @@ const sendEmail = async ({ to, subject, html, }) => {
     },
   });
 
-  try {
-    await transporter.verify();
-    console.log("✅ SMTP connection successful");
-  } catch (error) {
-    console.error("❌ SMTP verify failed:", error);
-    throw error;
-  }*/
-
-  const transporter = nodemailer.createTransport({
-  host: "smtp-relay.brevo.com",
-  port: 587,
-  secure: false,
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
-  },
-});
-
- /* const transporter = nodemailer.createTransport({
-
-    service: "gmail",
-
-    auth: {
-      user:
-        process.env.EMAIL_USER,
-
-      pass:
-        process.env.EMAIL_PASS,
-    },
-  });*/
+  await transporter.verify();
+  console.log("✅ SMTP connection successful");
 
   const info = await transporter.sendMail({
-
-    from: process.env.EMAIL_USER,
-
+    from: "My Herbal Shop <myherbalshop6@gmail.com>",
     to,
-
     subject,
-
     html,
   });
 
