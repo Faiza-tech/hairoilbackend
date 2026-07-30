@@ -2,7 +2,7 @@ const nodemailer = require("nodemailer");
 
 const sendEmail = async ({ to, subject, html, }) => {
 
-
+/*
   const transporter = nodemailer.createTransport({
     host: "smtp.gmail.com",
     port: 587,
@@ -14,9 +14,9 @@ const sendEmail = async ({ to, subject, html, }) => {
   });
 
   await transporter.verify();
-  console.log("SMTP connection successful");
+  console.log("SMTP connection successful");*/
 
-  /*const transporter = nodemailer.createTransport({
+  const transporter = nodemailer.createTransport({
 
     service: "gmail",
 
@@ -27,7 +27,7 @@ const sendEmail = async ({ to, subject, html, }) => {
       pass:
         process.env.EMAIL_PASS,
     },
-  });*/
+  });
 
   const info = await transporter.sendMail({
 
