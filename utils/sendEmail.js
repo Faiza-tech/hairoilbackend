@@ -13,8 +13,13 @@ const sendEmail = async ({ to, subject, html, }) => {
     },
   });
 
-  await transporter.verify();
-  console.log("SMTP connection successful");
+  try {
+    await transporter.verify();
+    console.log("✅ SMTP connection successful");
+  } catch (error) {
+    console.error("❌ SMTP verify failed:", error);
+    throw error;
+  }
 
   /*const transporter = nodemailer.createTransport({
   host: "smtp-relay.brevo.com",
