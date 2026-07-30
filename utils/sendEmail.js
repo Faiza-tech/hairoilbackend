@@ -2,7 +2,21 @@ const nodemailer = require("nodemailer");
 
 const sendEmail = async ({ to, subject, html, }) => {
 
+
   const transporter = nodemailer.createTransport({
+    host: "smtp.gmail.com",
+    port: 587,
+    secure: false,
+    auth: {
+      user: process.env.EMAIL_USER,
+      pass: process.env.EMAIL_PASS,
+    },
+  });
+
+  await transporter.verify();
+  console.log("SMTP connection successful");
+
+  /*const transporter = nodemailer.createTransport({
 
     service: "gmail",
 
@@ -13,13 +27,13 @@ const sendEmail = async ({ to, subject, html, }) => {
       pass:
         process.env.EMAIL_PASS,
     },
-  });
+  });*/
 
-  await transporter.sendMail({
+  const info = await transporter.sendMail({
 
-    from: process.env.EMAIL_USER, 
+    from: process.env.EMAIL_USER,
 
-    to, 
+    to,
 
     subject,
 
