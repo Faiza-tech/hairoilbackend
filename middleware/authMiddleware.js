@@ -7,7 +7,7 @@ const protect = async (req, res, next) => {
 
     let token;
 
-     console.log("Authorization Header:", req.headers.authorization);
+    console.log("Authorization Header:", req.headers.authorization);
 
     // check token exists
     if (
@@ -20,7 +20,7 @@ const protect = async (req, res, next) => {
             // get token from header
             token = req.headers.authorization.split(" ")[1];
 
-               console.log("TOKEN:", token);
+            console.log("TOKEN:", token);
 
             // verify token
             const decoded = jwt.verify(
@@ -28,13 +28,16 @@ const protect = async (req, res, next) => {
                 process.env.JWT_SECRET
             );
 
-              console.log("DECODED:", decoded);
+            console.log("DECODED:", decoded);
 
             // get user from database
             req.user = await User.findById(decoded.id)
                 .select("-password");
 
-                    console.log("USER:", req.user);
+            console.log("Logged in user:", req.user.email);
+            console.log("Admin:", req.user.isAdmin);
+
+            console.log("USER:", req.user);
 
             if (!req.user) {
                 return res.status(401).json({
@@ -58,7 +61,7 @@ const protect = async (req, res, next) => {
 
     if (!token) {
 
-         console.log("NO TOKEN");
+        console.log("NO TOKEN");
 
         return res.status(401).json({
             message: "Not authorized, no token",

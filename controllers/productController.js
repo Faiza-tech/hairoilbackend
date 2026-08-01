@@ -300,6 +300,9 @@ const createProductReview = async (req, res) => {
 // DELETE REVIEW
 const deleteReview = async (req, res) => {
 
+    console.log("DELETE REVIEW ROUTE HIT");
+  console.log(req.user);
+
   try {
 
     const product = await Product.findById(
