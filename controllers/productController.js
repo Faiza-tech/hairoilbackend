@@ -213,11 +213,11 @@ const updateProduct = async (req, res) => {
     product.category =
       req.body.category || product.category;
 
-      product.stock = 
+    product.stock =
       req.body.stock !== undefined
         ? req.body.stock
         : product.stock;
-        
+
     product.features =
       req.body.features || product.features;
 
@@ -323,16 +323,27 @@ const deleteReview = async (req, res) => {
         message: "Review not found",
       });
     }
+    /*
+        // ALLOW ONLY OWNER
+        if (
+          review.user.toString() !==
+          req.user._id.toString()
+        ) {
+          return res.status(401).json({
+            message: "Not authorized",
+          });
+        }*/
 
-    // ALLOW ONLY OWNER
+    // Allow review owner OR admin
     if (
-      review.user.toString() !==
-      req.user._id.toString()
+      review.user.toString() !== req.user._id.toString() &&
+      !req.user.isAdmin
     ) {
-      return res.status(401).json({
-        message: "Not authorized",
+      return res.status(403).json({
+        message: "You don't have permission to modify this review",
       });
     }
+
 
     // REMOVE REVIEW
     product.reviews = product.reviews.filter(
@@ -394,15 +405,30 @@ const updateReview = async (req, res) => {
       });
     }
 
-    // OWNER ONLY
+
+    /*
+        // OWNER ONLY
+        if (
+          review.user.toString() !==
+          req.user._id.toString()
+        ) {
+          return res.status(401).json({
+            message: "Not authorized",
+          });
+        }
+        */
+
+    // Allow review owner OR admin
     if (
-      review.user.toString() !==
-      req.user._id.toString()
+      review.user.toString() !== req.user._id.toString() &&
+      !req.user.isAdmin
     ) {
-      return res.status(401).json({
-        message: "Not authorized",
+      return res.status(403).json({
+        message: "You don't have permission to modify this review",
       });
     }
+
+
 
     review.rating = rating;
     review.comment = comment;
