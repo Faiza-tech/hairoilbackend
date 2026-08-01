@@ -1,31 +1,37 @@
-
-
-
-const nodemailer = require("nodemailer");
+const axios = require("axios");
 
 const sendEmail = async ({ to, subject, html }) => {
+  try {
+    const response = await axios.post(
+      "https://api.brevo.com/v3/smtp/email",
+      {
+        sender: {
+          name: "My Herbal Shop",
+          email: "myherbalshop6@gmail.com",
+        },
+        to: [
+          {
+            email: to,
+          },
+        ],
+        subject,
+        htmlContent: html,
+      },
+      {
+        headers: {
+          "api-key": process.env.BREVO_API_KEY,
+          "Content-Type": "application/json",
+        },
+      }
+    );
 
-  const transporter = nodemailer.createTransport({
-    host: "smtp-relay.brevo.com",
-    port: 587,
-    secure: false,
-    auth: {
-      user: process.env.EMAIL_USER,
-      pass: process.env.EMAIL_PASS,
-    },
-  });
-
-  await transporter.verify();
-  console.log("✅ SMTP connection successful");
-
-  const info = await transporter.sendMail({
-    from: "My Herbal Shop <myherbalshop6@gmail.com>",
-    to,
-    subject,
-    html,
-  });
-
-  console.log("Message ID:", info.messageId);
+    console.log("✅ Email sent:", response.data);
+  } catch (error) {
+    console.error(
+      "❌ Brevo Email Error:",
+      error.response?.data || error.message
+    );
+  }
 };
 
 module.exports = sendEmail;

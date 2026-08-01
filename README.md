@@ -291,6 +291,7 @@ npm install nodemailer
 npm install stripe
 npm install cloudinary
 npm install multer
+npm install @getbrevo/brevo
 ```
 
 For development:
